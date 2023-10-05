@@ -1,6 +1,6 @@
-import CliApplication from "./app/cli";
-import HelperCommand from "./helper.command";
-import VersionCommand from "./version.command";
+import CliApplication from "./app/cli.js";
+import HelperCommand from "./core/cli-command/helper.command";
+import VersionCommand from "./core/cli-command/version.command";
 
 const myManager = new CliApplication();
 myManager.registerCommands([new HelperCommand(), new VersionCommand()]);
