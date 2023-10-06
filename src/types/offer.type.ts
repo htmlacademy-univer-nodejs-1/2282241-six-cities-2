@@ -1,14 +1,16 @@
-import {TypeHousing} from "./typeHousing";
-import {ConveniencesType} from "./conveniences.type";
-import {User} from "./user.type";
+import {TypeHousing} from "./typeHousing.js";
+import {ConveniencesType} from "./conveniences.type.js";
+import {User} from "./user.type.js";
+import {CityType} from "./city.type.js";
+import {CoordinatesType} from "./coordinates.type.js";
 
 export type Offer = {
     name: string;
     description: string;
     date: Date;
-    city: string;
+    city: CityType;
     previewImg: string;
-    images: string;
+    images: string[];
     flagIsPremium: boolean;
     flagIsFavourites: boolean;
     rating: 1 | 2 | 3 | 4 | 5;
@@ -19,5 +21,5 @@ export type Offer = {
     conveniences: ConveniencesType;
     author: User;
     countComments: number;
-    coordinates: number;
+    coordinates: CoordinatesType;
 }
