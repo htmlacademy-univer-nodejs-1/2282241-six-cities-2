@@ -1,48 +1,39 @@
 import {FileReaderInterface} from './file-reader.interface.js';
-import {readFileSync} from 'node:fs';
-import {Offer} from '../../types/offer.type.js';
-import {CityType} from '../../types/city.type.js';
-import {TypeHousing} from '../../types/typeHousing.js';
-import {ConveniencesType} from '../../types/conveniences.type.js';
-import {User} from '../../types/user.type.js';
-import {CoordinatesType} from '../../types/coordinates.type.js';
+import EventEmitter from 'node:events';
+import {createReadStream} from 'node:fs';
 
-export default class TsvFileReader implements FileReaderInterface {
-  private rawData = '';
-
+const CHUCK_SIZE = 16384;
+export default class TsvFileReader extends EventEmitter implements FileReaderInterface {
   constructor(public filename: string) {
+    super();
   }
 
-  public read(): void {
-    this.rawData = readFileSync(this.filename, {encoding: 'utf-8'});
-  }
+  public async read(): Promise<void> {
+    const stream = createReadStream(this.filename, {
+      highWaterMark: CHUCK_SIZE,
+      encoding: 'utf-8',
+    });
 
-  public toArray(): Offer[] {
-    if (!this.rawData) {
-      return [];
+    let remainingData = '';
+    let nextLinePosition = -1;
+    let importedRowCount = 0;
+
+    for await (const chunk of stream) {
+      remainingData += chunk.toString();
+
+      while ((nextLinePosition = remainingData.indexOf('\n')) >= 0) {
+        const completeRow = remainingData.slice(0, nextLinePosition + 1);
+        remainingData = remainingData.slice(++nextLinePosition);
+        importedRowCount++;
+
+        await new Promise((resolve) => {
+          this.emit('line', completeRow, resolve);
+        });
+      }
     }
-    return this.rawData
-      .split('\n')
-      .filter((row) => row.trim() !== '')
-      .map((line) => line.split('\t'))
-      .map(([name, description, date, city, previewImg, images, flagIsPremium, flagIsFavourites, rating, typeHousing, countRooms, countPeople, price, conveniences, author, countComments, coordinates]) => ({
-        name: name,
-        description: description,
-        date: new Date(date),
-        city: city as CityType,
-        previewImg: previewImg,
-        images: images.split(';'),
-        flagIsPremium: flagIsPremium as unknown as boolean,
-        flagIsFavourites: flagIsFavourites as unknown as boolean,
-        rating: rating as unknown as 1 | 2 | 3 | 4 | 5,
-        typeHousing: typeHousing as TypeHousing,
-        countRooms: countRooms as unknown as 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8,
-        countPeople: countPeople as unknown as 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10,
-        price: Number.parseInt(price, 10),
-        conveniences: conveniences as ConveniencesType,
-        author: author as unknown as User,
-        countComments: Number.parseInt(countComments, 10),
-        coordinates: coordinates.split(',') as unknown as CoordinatesType,
-      }));
+
+    this.emit('end', importedRowCount);
+
   }
+
 }
