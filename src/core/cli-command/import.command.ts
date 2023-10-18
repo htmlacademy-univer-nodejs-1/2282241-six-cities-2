@@ -17,13 +17,16 @@ export default class ImportCommand implements CliCommandInterface {
   }
 
   public async execute(filename: string): Promise<void> {
+    if(filename === undefined){
+      console.log(chalk.red('Укажите после команды --import путь к файлу'));
+    }
     const fileReader = new TsvFileReader(filename.trim());
     fileReader.on('line', this.onLine);
     fileReader.on('end', this.onComplete);
     try {
       await fileReader.read();
     } catch(err) {
-      console.log(chalk.red(`Can't read the file: ${getErrorMessage(err)}`));
+      console.error(chalk.red(`Can't read the file: ${getErrorMessage(err)}`));
     }
   }
 }
