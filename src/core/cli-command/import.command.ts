@@ -9,7 +9,6 @@ export default class ImportCommand implements CliCommandInterface {
     const fileReader = new TsvFileReader(filename.trim());
     try {
       fileReader.read();
-      console.log(fileReader.toArray());
     } catch (err) {
       if (!(err instanceof Error)) {
         throw err;
