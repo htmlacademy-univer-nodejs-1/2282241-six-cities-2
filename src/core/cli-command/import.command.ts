@@ -6,7 +6,6 @@ import {getErrorMessage} from '../helpers/common.js';
 
 export default class ImportCommand implements CliCommandInterface {
   public readonly name = '--import';
-
   private onLine(line: string) {
     const offer = createOffer(line);
     console.log(offer);
