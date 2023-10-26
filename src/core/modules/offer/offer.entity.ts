@@ -1,11 +1,11 @@
-import typegoose, {defaultClasses, getModelForClass} from '@typegoose/typegoose';
-import {Offer} from '../../../types/offer.type.js';
-import {CityType} from '../../../types/city.type.js';
-import {TypeHousing} from '../../../types/typeHousing.js';
-import {ConveniencesType} from '../../../types/conveniences.type.js';
-import {UserEntity} from '../user/user.entity.js';
-import {User} from '../../../types/user.type.js';
-import {CoordinatesType} from '../../../types/coordinates.type.js';
+import typegoose, { defaultClasses, getModelForClass } from '@typegoose/typegoose';
+import { CityType } from '../../../types/city.type.js';
+import { ConveniencesType } from '../../../types/conveniences.type.js';
+import { CoordinatesType } from '../../../types/coordinates.type.js';
+import { Offer } from '../../../types/offer.type.js';
+import { TypeHousing } from '../../../types/typeHousing.js';
+import { User } from '../../../types/user.type.js';
+import { UserEntity } from '../user/user.entity.js';
 
 const {prop, modelOptions} = typegoose;
 

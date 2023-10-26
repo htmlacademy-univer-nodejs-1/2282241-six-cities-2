@@ -61,6 +61,10 @@ export default class ImportCommand implements CliCommandInterface {
   }
 
   public async execute(filename: string, login: string, password: string, host: string, dbname: string, salt: string): Promise<void> {
+    if (filename === undefined) {
+      console.log(chalk.red('Укажите после команды --import путь к файлу'));
+    }
+
     const uri = getMongoURI(login, password, host, DEFAULT_DB_PORT, dbname);
     this.salt = salt;
 
