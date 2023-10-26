@@ -1,9 +1,9 @@
 import {Offer} from '../../types/offer.type.js';
-import {CityType} from '../../types/city.type';
+import {CityType} from '../../types/city.type.js';
 import {TypeHousing} from '../../types/typeHousing.js';
-import {ConveniencesType} from '../../types/conveniences.type';
-import {User} from '../../types/user.type';
-import {CoordinatesType} from '../../types/coordinates.type';
+import {ConveniencesType} from '../../types/conveniences.type.js';
+import {User} from '../../types/user.type.js';
+import {CoordinatesType} from '../../types/coordinates.type.js';
 
 
 export function createOffer(offerData: string): Offer {
