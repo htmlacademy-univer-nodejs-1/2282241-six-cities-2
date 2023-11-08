@@ -11,7 +11,7 @@ paths:
     post:
       tags:
         - offers
-      summary:  Создание нового предложения
+      summary: Создание нового предложения
       requestBody:
         content:
           application/json:
@@ -25,7 +25,7 @@ paths:
           description: Некорректная валидация
         401:
           description: Не авторизованный пользователь
-      description:  Создание нового предложения
+      description: Создание нового предложения
 
     put:
       tags:
@@ -50,41 +50,19 @@ paths:
         400:
           description: Пользователь может удалять только свои предложения
         401:
-          description:  Не авторизованный пользователь
+          description: Не авторизованный пользователь
       description: Удаление существующего объявления
 
   /offers?countRequests=60:
     get:
       tags:
         - offers
-      summary:   Список предложений по аренде
+      summary: Список предложений по аренде
       responses:
         200:
           description: Успешно получен список предложений
         401:
           description: Не авторизованный пользователь
-
-#  /offers/new:
-#    get:
-#      tags:
-#        - offers
-#      summary:  Список новых объявлений
-#      responses:
-#        200:
-#          description:  Список новых объявлений успешно получен
-#        400:
-#          description: Новых объявлений нет
-
-#  /offers/popular:
-#    get:
-#      tags:
-#        - offers
-#      summary: Список обсуждаемых объявлений
-#      responses:
-#        200:
-#          description: Список обсуждаемых объявлений успешно получен
-#        400:
-#          description: Обсуждаемых объявлений нет
 
   /offers/details:
     get:
@@ -119,7 +97,7 @@ paths:
     post:
       tags:
         - users
-      summary:  Создание нового пользователя
+      summary: Создание нового пользователя
       requestBody:
         description: Информация для создания нового пользователя.
         content:
@@ -184,7 +162,7 @@ paths:
     get:
       tags:
         - offers
-      summary:  Список избранных предложений
+      summary: Список избранных предложений
       responses:
         200:
           description: Возвращает список избранных предложений
@@ -261,7 +239,7 @@ components:
       properties:
         name:
           type: string
-          example:  "Ключ к успеху"
+          example: "Ключ к успеху"
 
         description:
           type: string
@@ -281,7 +259,7 @@ components:
 
         images:
           type: string
-          example: [ "apartment-01.jpg;","apartment-02.jpg;"]
+          example: [ "apartment-01.jpg;","apartment-02.jpg;" ]
 
         flagIsPremium:
           type: boolean
@@ -323,7 +301,7 @@ components:
 
         coordinates:
           type: string
-          example:
+          example: '48.85661;2.351499'
 
     createComments:
       type: object
