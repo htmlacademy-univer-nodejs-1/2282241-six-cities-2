@@ -23,7 +23,7 @@ export default class ImportCommand implements CliCommandInterface {
   private userService!: UserServiceInterface;
   private offerService!: OfferServiceInterface;
   private databaseService!: DatabaseClientInterface;
-  private logger: LoggerInterface;
+  private readonly logger: LoggerInterface;
   private salt!: string;
 
   constructor() {
@@ -54,8 +54,10 @@ export default class ImportCommand implements CliCommandInterface {
   }
 
   private onComplete(count: number) {
-    console.log(`${count} rows imported.`);
-    this.databaseService.disconnect();
+    this.logger.info(`${count} rows imported.`);
+    this.databaseService.disconnect().then((value) => {
+      console.log(value);
+    });
   }
 
   public async execute(filename: string, login: string, password: string, host: string, dbname: string, salt: string): Promise<void> {
@@ -74,7 +76,7 @@ export default class ImportCommand implements CliCommandInterface {
       if (!(err instanceof Error)) {
         throw err;
       }
-      console.log(`Не удалось импортировать данные из файла: '${chalk.red(err.message)}'`);
+      this.logger.error(`Не удалось импортировать данные из файла: '${chalk.red(err.message)}'`);
     }
   }
 }
