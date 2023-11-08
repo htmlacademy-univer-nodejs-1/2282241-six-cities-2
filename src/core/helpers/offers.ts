@@ -13,7 +13,7 @@ export function createOffer(offerData: string): Offer {
     description,
     date: new Date(date),
     city: city as CityType,
-    previewImg,
+    previewImg: previewImg,
     images: images.split(';'),
     flagIsPremium: flagIsPremium as unknown as boolean,
     flagIsFavourites: flagIsFavourites as unknown as boolean,

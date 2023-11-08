@@ -8,13 +8,13 @@ export interface UserEntity extends defaultClasses.Base {
 }
 
 @modelOptions({
-    schemaOptions: {
-        collection: 'users'
-    }
+  schemaOptions: {
+    collection: 'users'
+  }
 })
 export class UserEntity extends defaultClasses.TimeStamps implements User {
     @prop({unique: true, required: true})
-    public email: string;
+  public email: string;
 
     @prop({required: true})
     public name: string;
@@ -26,20 +26,20 @@ export class UserEntity extends defaultClasses.TimeStamps implements User {
     private password!: string;
 
     constructor(userData: User) {
-        super();
+      super();
 
-        this.email = userData.email;
-        this.avatar = userData.avatar;
-        this.name = userData.name;
-        this.userType = userData.userType;
+      this.email = userData.email;
+      this.avatar = userData.avatar;
+      this.name = userData.name;
+      this.userType = userData.userType;
     }
 
     public setPassword(password: string, salt: string) {
-        this.password = createSHA256(password, salt);
+      this.password = createSHA256(password, salt);
     }
 
     public getPassword() {
-        return this.password;
+      return this.password;
     }
 
     @prop({required: true})
