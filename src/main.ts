@@ -17,4 +17,4 @@ async function bootstrap() {
   await application.init();
 }
 
-bootstrap().then(value => console.log(value));
+bootstrap().then((value) => console.log(value));
