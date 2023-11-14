@@ -8,6 +8,8 @@ import ConfigService from '../core/config/config.service.js';
 import {DatabaseClientInterface} from '../core/database-client/database-client.interface.js';
 import MongoClientService from '../core/database-client/mongo-client.service.js';
 import {Container} from 'inversify';
+import {ExceptionFilterInterface} from '../core/exception-filters/exception-filter.interface';
+import {ExceptionFilter} from '../core/exception-filters/exception-filter.js';
 
 export function createRestApplicationContainer() {
   const restApplicationContainer = new Container();
@@ -15,5 +17,6 @@ export function createRestApplicationContainer() {
   restApplicationContainer.bind<LoggerInterface>(AppComponent.LoggerInterface).to(PinoService).inSingletonScope();
   restApplicationContainer.bind<ConfigInterface<RestSchema>>(AppComponent.ConfigInterface).to(ConfigService).inSingletonScope();
   restApplicationContainer.bind<DatabaseClientInterface>(AppComponent.DatabaseClientInterface).to(MongoClientService).inSingletonScope();
+  restApplicationContainer.bind<ExceptionFilterInterface>(AppComponent.ExceptionFilterInterface).to(ExceptionFilter).inSingletonScope();
   return restApplicationContainer;
 }

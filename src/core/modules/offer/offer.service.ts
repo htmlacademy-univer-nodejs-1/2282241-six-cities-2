@@ -6,7 +6,7 @@ import {OfferServiceInterface} from './offer-service.interface.js';
 import {LoggerInterface} from '../../logger/logger.interface.js';
 import {AppComponent} from '../../../types/app-component.enum.js';
 import UpdateOfferDto from './dto/update-offer-dto.js';
-import {DEFAULT_OFFER_COUNT} from './offer.constant';
+import {DEFAULT_OFFER_COUNT} from './offer.constant.js';
 import {SortType} from '../../../types/sort-type.js';
 
 @injectable()

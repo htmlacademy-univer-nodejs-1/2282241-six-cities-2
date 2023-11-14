@@ -1,15 +1,16 @@
-import {injectable} from "inversify";
+import {injectable} from 'inversify';
+import asyncHandler from 'express-async-handler';
 import { Response, Router } from 'express';
-import {Route} from "../../types/route.interface";
-import {StatusCodes} from "http-status-codes";
-import {Controller} from "./controller.interface";
-import {LoggerInterface} from "../logger/logger.interface";
+import {RouteInterface} from '../../types/route.interface';
+import {StatusCodes} from 'http-status-codes';
+import {ControllerInterface} from './controller.interface';
+import {LoggerInterface} from '../logger/logger.interface';
 
 @injectable()
-export abstract class BaseController implements Controller {
+export abstract class BaseController implements ControllerInterface {
   private readonly _router: Router;
 
-   constructor(
+  constructor(
     protected readonly logger: LoggerInterface
   ) {
     this._router = Router();
@@ -19,8 +20,8 @@ export abstract class BaseController implements Controller {
     return this._router;
   }
 
-  public addRoute(route: Route) {
-    this._router[route.method](route.path, route.handler.bind(this));
+  public addRoute(this: BaseController, route: RouteInterface) {
+    this._router[route.method](route.path, asyncHandler(route.handler.bind(this)));
     this.logger.info(`Route registered: ${route.method.toUpperCase()} ${route.path}`);
   }
 
