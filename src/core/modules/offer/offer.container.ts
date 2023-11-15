@@ -4,8 +4,8 @@ import OfferService from './offer.service.js';
 import { OfferEntity, OfferModel } from './offer.entity.js';
 import { OfferServiceInterface } from './offer-service.interface.js';
 import {AppComponent} from '../../../types/app-component.enum.js';
-import {BaseController} from "../../controller/base-controller";
-import OfferController from "./controller/offer.controller";
+import {BaseController} from '../../controller/base-controller.js';
+import OfferController from './controller/offer.controller.js';
 
 export function createOfferContainer() {
   const offerContainer = new Container();
