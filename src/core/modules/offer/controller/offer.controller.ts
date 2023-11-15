@@ -42,10 +42,6 @@ export default class OfferController extends BaseController {
     this.created(res, fillDTO(OfferRdo, result));
   }
 
-  // public async delete({id}: Request<Record<string, unknown>, Record<string, unknown>, CreateOfferDto>, res: Response): Promise<void> {
-  //   const offer = await this.offersService.deleteById(id);
-  //   this.noContent(res, offer)
-  // }
   public async delete({ params }: Request<ParamOfferId>, res: Response): Promise<void> {
     const { offerId } = params;
     const offer = await this.offersService.deleteById(offerId);
