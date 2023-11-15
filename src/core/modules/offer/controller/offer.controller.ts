@@ -9,9 +9,9 @@ import {Request, Response} from 'express';
 import {OfferServiceInterface} from '../offer-service.interface';
 import {fillDTO} from '../../../helpers/common.js';
 import {OfferRdo} from '../rdo/offer-rdo.js';
-import CreateOfferDto from "../dto/create-offer.dto";
-import UpdateOfferDto from "../dto/update-offer-dto";
-import {ParamOfferId} from "../../../../types/param-offer-id";
+import CreateOfferDto from '../dto/create-offer.dto';
+import UpdateOfferDto from '../dto/update-offer-dto.js';
+import {ParamOfferId} from '../../../../types/param-offer-id.js';
 
 @injectable()
 export default class OfferController extends BaseController {
@@ -60,6 +60,7 @@ export default class OfferController extends BaseController {
 
     this.noContent(res, offer);
   }
+
   public async update({ body, params }: Request<ParamOfferId, unknown, UpdateOfferDto>, res: Response): Promise<void> {
     const updatedOffer = await this.offersService.updateById(params.offerId, body);
 
@@ -73,6 +74,7 @@ export default class OfferController extends BaseController {
 
     this.ok(res, fillDTO(OfferRdo, updatedOffer));
   }
+
   public async show(_req: Request, _res: Response): Promise<void> {
     throw new HttpError(
       StatusCodes.NOT_IMPLEMENTED,
