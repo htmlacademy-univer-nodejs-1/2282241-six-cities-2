@@ -1,9 +1,9 @@
 import {test, beforeAll, afterAll} from 'vitest';
-import {createRestApplicationContainer} from "../app/rest.container";
-import Application from "../app/rest";
+import {createRestApplicationContainer} from '../app/rest.container';
+import Application from '../app/rest.js';
 
 const container = createRestApplicationContainer();
-const app = container.get(Application)
+const app = container.get(Application);
 beforeAll(()=>{
   app.init();
 });
