@@ -1,5 +1,5 @@
 import {CityType} from '../../../../types/city.type';
-import {TypeHousing} from '../../../../types/typeHousing.ts';
+import {TypeHousing} from '../../../../types/typeHousing.js';
 import {ConveniencesType} from '../../../../types/conveniences.type';
 import {User} from '../../../../types/user.type';
 import {CoordinatesType} from '../../../../types/coordinates.type';

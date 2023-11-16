@@ -20,7 +20,7 @@ export interface OfferServiceInterface {
 
     getPremium(): Promise<DocumentType<OfferEntity>[]>;
 
-    getFavorite(): Promise<DocumentType<OfferEntity>[]>;
+    // getFavorite(): Promise<DocumentType<OfferEntity>[]>;
 
     calculationRating(rating: number, newRating: number, countRating:number, offerId:string): Promise<void>;
 

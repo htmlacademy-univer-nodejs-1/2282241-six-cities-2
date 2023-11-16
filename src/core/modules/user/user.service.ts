@@ -1,17 +1,19 @@
-import { UserEntity } from './user.entity.js';
-import { DocumentType, types } from '@typegoose/typegoose';
+import {UserEntity} from './user.entity.js';
+import {DocumentType, types} from '@typegoose/typegoose';
 import CreateUserDto from './dto/create-user.dto.js';
 import {UserServiceInterface} from './user-service.interface.js';
 import {AppComponent} from '../../../types/app-component.enum.js';
 import {inject, injectable} from 'inversify';
 import {LoggerInterface} from '../../logger/logger.interface.js';
+import {OfferEntity} from '../offer/offer.entity';
 
 @injectable()
 export default class UserService implements UserServiceInterface {
   constructor(
         @inject(AppComponent.LoggerInterface) private readonly logger: LoggerInterface,
         @inject(AppComponent.UserModel) private readonly userModel: types.ModelType<UserEntity>
-  ) {}
+  ) {
+  }
 
   public async create(dto: CreateUserDto, salt: string): Promise<DocumentType<UserEntity>> {
     const user = new UserEntity(dto);
@@ -35,5 +37,13 @@ export default class UserService implements UserServiceInterface {
     }
 
     return this.create(dto, salt);
+  }
+
+  public async FindFavoriteOffers(userId: string): Promise<DocumentType<OfferEntity>[]> {
+    const offersFavorite = await this.userModel.findById(userId).select('favorite').exec();
+    if (offersFavorite === null) {
+      return [];
+    }
+    return this.userModel.find({_id: {$in: offersFavorite.favoriteOffers}});
   }
 }
