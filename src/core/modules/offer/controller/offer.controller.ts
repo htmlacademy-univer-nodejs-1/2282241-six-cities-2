@@ -7,14 +7,15 @@ import {Request, Response} from 'express';
 import {OfferServiceInterface} from '../offer-service.interface';
 import {fillDTO} from '../../../helpers/common.js';
 import {OfferRdo} from '../rdo/offer-rdo.js';
-import CreateOfferDto from '../dto/create-offer.dto';
+import CreateOfferDto from '../dto/create-offer.dto.js';
 import UpdateOfferDto from '../dto/update-offer-dto.js';
 import {ParamOfferId} from '../../../../types/param-offer-id.js';
-import {CommentService} from '../../comment/comment.service';
+import {CommentService} from '../../comment/comment.service.js';
 import {CommentRdo} from '../../comment/rdo/comment-rdo.js';
-import {ValidateObjectIdMiddleware} from '../../../middleware/validate-objectId.middleware';
-import {ValidateDtoMiddleware} from '../../../middleware/validate-dto.middleware';
-import {DocumentExistsMiddleware} from '../../../middleware/document-exists.middleware';
+import {ValidateObjectIdMiddleware} from '../../../middleware/validate-objectId.middleware.js';
+import {ValidateDtoMiddleware} from '../../../middleware/validate-dto.middleware.js';
+import {DocumentExistsMiddleware} from '../../../middleware/document-exists.middleware.js';
+import {PrivateRouteMiddleware} from '../../../middleware/private-root.middleware';
 
 @injectable()
 export default class OfferController extends BaseController {
@@ -31,7 +32,10 @@ export default class OfferController extends BaseController {
       path: '/',
       method: HttpMethod.Post,
       handler: this.create,
-      middlewares: [new ValidateDtoMiddleware(CreateOfferDto)]
+      middlewares: [
+        new PrivateRouteMiddleware(),
+        new ValidateDtoMiddleware(CreateOfferDto)
+      ]
     });
     this.addRoute({
       path: '/:offerId',
@@ -47,6 +51,7 @@ export default class OfferController extends BaseController {
       method: HttpMethod.Delete,
       handler: this.delete,
       middlewares: [
+        new PrivateRouteMiddleware(),
         new ValidateObjectIdMiddleware('offerId'),
         new DocumentExistsMiddleware(this.offersService, 'Offer', 'offerId')
       ]
@@ -56,6 +61,7 @@ export default class OfferController extends BaseController {
       method: HttpMethod.Patch,
       handler: this.update,
       middlewares: [
+        new PrivateRouteMiddleware(),
         new ValidateObjectIdMiddleware('offerId'),
         new ValidateDtoMiddleware(UpdateOfferDto),
         new DocumentExistsMiddleware(this.offersService, 'Offer', 'offerId')
@@ -76,9 +82,11 @@ export default class OfferController extends BaseController {
   }
 
   public async create(
-    {body}: Request<Record<string, unknown>, Record<string, unknown>, CreateOfferDto>,
+    {body, user }: Request<Record<string, unknown>, Record<string, unknown>, CreateOfferDto>,
     res: Response): Promise<void> {
-    const result = await this.offersService.create(body);
+    const result = await this.offersService.create({ ...body, user: user});
+    // : Type { id: string; email: string; } is missing the following properties from type User: name, userType
+    // я не совсем понимаю, как исправить эту ошибку. При входе нам нужна только почта и пароль, но в ТЗ пользователь должен содержать поля имя и тип пользователя. Брать их при регистрации пользователя?
     this.created(res, fillDTO(OfferRdo, result));
   }
 
