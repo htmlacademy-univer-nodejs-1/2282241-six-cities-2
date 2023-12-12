@@ -2,7 +2,7 @@ import {
   IsArray,
   IsBoolean,
   IsDateString,
-  IsInt, IsMongoId,
+  IsInt,
   IsNumber,
   IsObject,
   IsString, Length,
@@ -17,12 +17,12 @@ import {CoordinatesType} from '../../../../types/coordinates.type.js';
 import {CreateOfferValidationMessage} from './create-offer-messages.js';
 
 export default class CreateOfferDto {
-  @MinLength(10, { message: CreateOfferValidationMessage.name.minLength })
-  @MaxLength(100, { message: CreateOfferValidationMessage.name.maxLength })
+  @MinLength(10, {message: CreateOfferValidationMessage.name.minLength})
+  @MaxLength(100, {message: CreateOfferValidationMessage.name.maxLength})
     name!: string;
 
-  @MinLength(20, { message: CreateOfferValidationMessage.name.minLength })
-  @MaxLength(1024, { message: CreateOfferValidationMessage.name.maxLength })
+  @MinLength(20, {message: CreateOfferValidationMessage.name.minLength})
+  @MaxLength(1024, {message: CreateOfferValidationMessage.name.maxLength})
     description!: string;
 
   @IsDateString({}, {message: CreateOfferValidationMessage.date.invalidFormat})
@@ -65,11 +65,11 @@ export default class CreateOfferDto {
   @IsString({message: CreateOfferValidationMessage.conveniences.invalidFormat})
     conveniences!: ConveniencesType;
 
-  @IsMongoId({ message: CreateOfferValidationMessage.author.invalidId })
-    author!: User;
+
+  user!: User;
 
   countComments!: number;
 
-  @IsObject({message:CreateOfferValidationMessage.coordinates.invalidFormat})
+  @IsObject({message: CreateOfferValidationMessage.coordinates.invalidFormat})
     coordinates!: CoordinatesType;
 }

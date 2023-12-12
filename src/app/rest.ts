@@ -8,6 +8,7 @@ import {getMongoURI} from '../core/helpers/db.js';
 import express, {Express} from 'express';
 import {ExceptionFilterInterface} from '../core/exception-filters/exception-filter.interface';
 import {BaseController} from '../core/controller/base-controller.js';
+import {AuthenticateMiddleware} from '../core/middleware/authenticate.middleware';
 
 @injectable()
 export default class Application {
@@ -59,6 +60,8 @@ export default class Application {
       '/upload',
       express.static(this.config.get('UPLOAD_DIRECTORY'))
     );
+    const authenticateMiddleware = new AuthenticateMiddleware(this.config.get('JWT_SECRET'));
+    this.server.use(authenticateMiddleware.execute.bind(authenticateMiddleware));
     this.logger.info('Middleware init completed');
   }
 

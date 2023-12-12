@@ -6,12 +6,13 @@ import {AppComponent} from '../../../types/app-component.enum.js';
 import {inject, injectable} from 'inversify';
 import {LoggerInterface} from '../../logger/logger.interface.js';
 import {OfferEntity} from '../offer/offer.entity';
+import {LoginUserDto} from './dto/login-user.dto';
 
 @injectable()
 export default class UserService implements UserServiceInterface {
   constructor(
-        @inject(AppComponent.LoggerInterface) private readonly logger: LoggerInterface,
-        @inject(AppComponent.UserModel) private readonly userModel: types.ModelType<UserEntity>
+    @inject(AppComponent.LoggerInterface) private readonly logger: LoggerInterface,
+    @inject(AppComponent.UserModel) private readonly userModel: types.ModelType<UserEntity>
   ) {
   }
 
@@ -45,5 +46,16 @@ export default class UserService implements UserServiceInterface {
       return [];
     }
     return this.userModel.find({_id: {$in: offersFavorite.favoriteOffers}});
+  }
+
+  public async verifyUser(dto: LoginUserDto, salt: string): Promise<DocumentType<UserEntity> | null> {
+    const user = await this.findByEmail(dto.email);
+    if (!user) {
+      return null;
+    }
+    if (user.verifyPassword(dto.password, salt)) {
+      return user;
+    }
+    return null;
   }
 }
