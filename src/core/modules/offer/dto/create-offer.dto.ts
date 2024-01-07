@@ -5,7 +5,6 @@ import {
   IsInt,
   IsNumber,
   IsString,
-  //Length,
   MaxLength,
   MinLength
 } from 'class-validator';
@@ -42,22 +41,18 @@ export default class CreateOfferDto {
   public flagIsFavourites!: boolean;
 
   @IsNumber({}, {message: CreateOfferValidationMessage.rating.invalidFormat})
-  //@Length(1, 5, {message: CreateOfferValidationMessage.rating.lengthField})
   public rating!: 1 | 2 | 3 | 4 | 5;
 
   @IsString({message: CreateOfferValidationMessage.typeHousing.invalidFormat})
   public typeHousing!: TypeHousing;
 
   @IsInt({message: CreateOfferValidationMessage.countRooms.invalidFormat})
-  //@Length(1, 8, {message: CreateOfferValidationMessage.countRooms.lengthField})
   public countRooms!: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8;
 
   @IsInt({message: CreateOfferValidationMessage.countPeople.invalidFormat})
-  //@Length(1, 10, {message: CreateOfferValidationMessage.countPeople.lengthField})
   public countPeople!: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10;
 
   @IsNumber({}, {message: CreateOfferValidationMessage.price.invalidFormat})
-  //@Length(100, 100000, {message: CreateOfferValidationMessage.price.lengthField})
   public price!: number;
 
   @IsString({message: CreateOfferValidationMessage.conveniences.invalidFormat})
