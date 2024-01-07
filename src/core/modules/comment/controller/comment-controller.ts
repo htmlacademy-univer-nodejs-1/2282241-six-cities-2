@@ -1,12 +1,12 @@
 import {inject, injectable} from 'inversify';
 import { Response, Request } from 'express';
+import {StatusCodes} from 'http-status-codes';
 import {BaseController} from '../../../controller/base-controller.js';
 import {AppComponent} from '../../../../types/app-component.enum.js';
 import {LoggerInterface} from '../../../logger/logger.interface.js';
 import {CommentService} from '../comment.service.js';
 import OfferService from '../../offer/offer.service.js';
 import {HttpMethod} from '../../../../types/http-method.enum.js';
-import {StatusCodes} from 'http-status-codes';
 import {HttpError} from '../../../errors/http-error.js';
 import {fillDTO} from '../../../helpers/common.js';
 import {CommentRdo} from '../rdo/comment-rdo.js';
