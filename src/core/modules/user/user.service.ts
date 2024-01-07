@@ -5,8 +5,10 @@ import {UserServiceInterface} from './user-service.interface.js';
 import {AppComponent} from '../../../types/app-component.enum.js';
 import {inject, injectable} from 'inversify';
 import {LoggerInterface} from '../../logger/logger.interface.js';
-import {OfferEntity} from '../offer/offer.entity';
-import {LoginUserDto} from './dto/login-user.dto';
+import {OfferEntity} from '../offer/offer.entity.js';
+import {LoginUserDto} from './dto/login-user.dto.js';
+import {DEFAULT_AVATAR_FILE_NAME} from './user.constant.js';
+import UpdateUserDto from './dto/update-user.dto';
 
 @injectable()
 export default class UserService implements UserServiceInterface {
@@ -17,11 +19,12 @@ export default class UserService implements UserServiceInterface {
   }
 
   public async create(dto: CreateUserDto, salt: string): Promise<DocumentType<UserEntity>> {
-    const user = new UserEntity(dto);
+    const user = new UserEntity({...dto, avatar: DEFAULT_AVATAR_FILE_NAME});
     user.setPassword(dto.password, salt);
 
     const result = await this.userModel.create(user);
     this.logger.info(`New user created: ${user.email}`);
+
 
     return result;
   }
@@ -40,12 +43,18 @@ export default class UserService implements UserServiceInterface {
     return this.create(dto, salt);
   }
 
-  public async FindFavoriteOffers(userId: string): Promise<DocumentType<OfferEntity>[]> {
+  public async findFavoriteOffers(userId: string): Promise<DocumentType<OfferEntity>[]> {
     const offersFavorite = await this.userModel.findById(userId).select('favorite').exec();
     if (offersFavorite === null) {
       return [];
     }
     return this.userModel.find({_id: {$in: offersFavorite.favoriteOffers}});
+  }
+
+  public async updateById(userId: string, dto: UpdateUserDto): Promise<DocumentType<UserEntity> | null> {
+    return this.userModel
+      .findByIdAndUpdate(userId, dto, {new: true})
+      .exec();
   }
 
   public async verifyUser(dto: LoginUserDto, salt: string): Promise<DocumentType<UserEntity> | null> {

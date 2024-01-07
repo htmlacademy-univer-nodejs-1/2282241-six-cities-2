@@ -1,7 +1,6 @@
 import typegoose, { defaultClasses, getModelForClass, Ref } from '@typegoose/typegoose';
 import { CityType } from '../../../types/city.type.js';
 import { ConveniencesType } from '../../../types/conveniences.type.js';
-import { CoordinatesType } from '../../../types/coordinates.type.js';
 import { TypeHousing } from '../../../types/typeHousing.js';
 import { UserEntity } from '../user/user.entity.js';
 
@@ -100,7 +99,7 @@ export class OfferEntity extends defaultClasses.TimeStamps {
   })
 
   @prop({required: true})
-  public coordinates!: CoordinatesType;
+  public coordinates!: number[];
 
 }
 

@@ -6,7 +6,6 @@ import {LoggerInterface} from '../../../logger/logger.interface.js';
 import {HttpMethod} from '../../../../types/http-method.enum.js';
 import CreateUserDto from '../dto/create-user.dto.js';
 import {RestSchema} from '../../../config/rest.schema.js';
-import {Config} from 'convict';
 import UserService from '../user.service.js';
 import {HttpError} from '../../../errors/http-error.js';
 import {StatusCodes} from 'http-status-codes';
@@ -17,16 +16,18 @@ import {ValidateObjectIdMiddleware} from '../../../middleware/validate-objectId.
 import {LoginUserDto} from '../dto/login-user.dto.js';
 import {JWT_ALGORITHM} from '../user.constant.js';
 import LoggedUserRdo from '../rdo/logged-user.rdo.js';
-import {UnknownRecord} from '../../../../types/unknown-record.type';
+import {UnknownRecord} from '../../../../types/unknown-record.type.js';
+import {ConfigInterface} from '../../../config/config.interface.js';
+import UploadAvatarResponse from '../rdo/upload-avatar.response.js';
 
 @injectable()
 export class UserController extends BaseController {
   constructor(
     @inject(AppComponent.LoggerInterface) protected readonly logger: LoggerInterface,
     @inject(AppComponent.UserServiceInterface) private readonly userService: UserService,
-    @inject(AppComponent.ConfigInterface) private readonly configService: Config<RestSchema>,
+    @inject(AppComponent.ConfigInterface) protected readonly configService: ConfigInterface<RestSchema>
   ) {
-    super(logger);
+    super(logger, configService);
     this.logger.info('Register routes for UserController…');
 
     this.addRoute({path: '/register', method: HttpMethod.Post, handler: this.create});
@@ -90,23 +91,21 @@ export class UserController extends BaseController {
       }
     );
 
-    this.ok(res, fillDTO(LoggedUserRdo, {
-      email: user.email,
+    this.ok(res, {
+      ...fillDTO(LoggedUserRdo, user),
       token
-    }));
+    });
   }
 
   public async uploadAvatar(req: Request, res: Response) {
-    this.created(res, {
-      filepath: req.file?.path
-    });
+    const {userId} = req.params;
+    const uploadFile = {avatar: req.file?.filename};
+    await this.userService.updateById(userId, uploadFile);
+    this.created(res, fillDTO(UploadAvatarResponse, uploadFile));
   }
-//TSError: ⨯ Unable to compile TypeScript:
-// src/core/modules/user/controller/user.controller.ts(105,36): error TS2339: Property 'user' does not exist on type 'Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>'.
-  public async checkAuthenticate({ user: { email }}: Request, res: Response) {
-    const foundedUser = await this.userService.findByEmail(email);
 
-    if (! foundedUser) {
+  public async checkAuthenticate(req: Request, res: Response) {
+    if (! req.user) {
       throw new HttpError(
         StatusCodes.UNAUTHORIZED,
         'Unauthorized',
@@ -114,6 +113,8 @@ export class UserController extends BaseController {
       );
     }
 
+    const { user: { email } } = req;
+    const foundedUser = await this.userService.findByEmail(email);
     this.ok(res, fillDTO(LoggedUserRdo, foundedUser));
   }
 }

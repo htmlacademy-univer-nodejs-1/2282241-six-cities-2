@@ -11,7 +11,7 @@ export interface UserServiceInterface {
 
   findOrCreate(dto: CreateUserDto, salt: string): Promise<DocumentType<UserEntity>>;
 
-  FindFavoriteOffers(userId: string): Promise<DocumentType<OfferEntity>[]>;
+  findFavoriteOffers(userId: string): Promise<DocumentType<OfferEntity>[]>;
 
   verifyUser(dto: LoginUserDto, salt: string): Promise<DocumentType<UserEntity> | null>;
 }
