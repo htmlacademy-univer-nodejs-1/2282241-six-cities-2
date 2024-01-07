@@ -10,7 +10,6 @@ import {
   IsMongoId,
   IsNumber, IsOptional,
   IsString,
-  //Length,
   MaxLength,
   MinLength
 } from 'class-validator';
@@ -53,7 +52,6 @@ export default class UpdateOfferDto {
 
   @IsOptional()
   @IsNumber({}, {message: CreateOfferValidationMessage.rating.invalidFormat})
-    //@Length(1, 5, {message: CreateOfferValidationMessage.rating.lengthField})
     rating?: 1 | 2 | 3 | 4 | 5;
 
   @IsOptional()
@@ -62,17 +60,14 @@ export default class UpdateOfferDto {
 
   @IsOptional()
   @IsInt({message: CreateOfferValidationMessage.countRooms.invalidFormat})
-    //@Length(1, 8, {message: CreateOfferValidationMessage.countRooms.lengthField})
     countRooms?: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8;
 
   @IsOptional()
   @IsInt({message: CreateOfferValidationMessage.countPeople.invalidFormat})
-    //@Length(1, 10, {message: CreateOfferValidationMessage.countPeople.lengthField})
     countPeople?: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10;
 
   @IsOptional()
   @IsNumber({}, {message: CreateOfferValidationMessage.price.invalidFormat})
-    //@Length(100, 100000, {message: CreateOfferValidationMessage.price.lengthField})
     price?: number;
 
   @IsOptional()
