@@ -8,7 +8,7 @@ import {LoggerInterface} from '../../logger/logger.interface.js';
 import {OfferEntity} from '../offer/offer.entity.js';
 import {LoginUserDto} from './dto/login-user.dto.js';
 import {DEFAULT_AVATAR_FILE_NAME} from './user.constant.js';
-import UpdateUserDto from "./dto/update-user.dto";
+import UpdateUserDto from './dto/update-user.dto';
 
 @injectable()
 export default class UserService implements UserServiceInterface {
@@ -24,6 +24,7 @@ export default class UserService implements UserServiceInterface {
 
     const result = await this.userModel.create(user);
     this.logger.info(`New user created: ${user.email}`);
+
 
     return result;
   }
@@ -55,6 +56,7 @@ export default class UserService implements UserServiceInterface {
       .findByIdAndUpdate(userId, dto, {new: true})
       .exec();
   }
+
   public async verifyUser(dto: LoginUserDto, salt: string): Promise<DocumentType<UserEntity> | null> {
     const user = await this.findByEmail(dto.email);
     if (!user) {

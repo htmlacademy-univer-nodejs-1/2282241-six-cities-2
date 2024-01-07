@@ -18,7 +18,7 @@ import {JWT_ALGORITHM} from '../user.constant.js';
 import LoggedUserRdo from '../rdo/logged-user.rdo.js';
 import {UnknownRecord} from '../../../../types/unknown-record.type.js';
 import {ConfigInterface} from '../../../config/config.interface.js';
-import UploadAvatarResponse from "../rdo/upload-avatar.response";
+import UploadAvatarResponse from '../rdo/upload-avatar.response.js';
 
 @injectable()
 export class UserController extends BaseController {
