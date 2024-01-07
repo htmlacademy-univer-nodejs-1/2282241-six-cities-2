@@ -2,8 +2,8 @@ import { NextFunction, Request, Response } from 'express';
 import { jwtVerify } from 'jose';
 import { StatusCodes } from 'http-status-codes';
 import { createSecretKey } from 'node:crypto';
-import {HttpError} from '../errors/http-error.ts';
-import {Middleware} from './middleware.interface';
+import {HttpError} from '../errors/http-error.js';
+import {Middleware} from './middleware.interface.js';
 
 export class AuthenticateMiddleware implements Middleware {
   constructor(private readonly jwtSecret: string) {}

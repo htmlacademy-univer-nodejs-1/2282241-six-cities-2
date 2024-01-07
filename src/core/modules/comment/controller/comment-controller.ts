@@ -11,8 +11,9 @@ import {HttpError} from '../../../errors/http-error.js';
 import {fillDTO} from '../../../helpers/common.js';
 import {CommentRdo} from '../rdo/comment-rdo.js';
 import CreateCommentDto from '../dto/create-comment.dto.js';
-import {ValidateDtoMiddleware} from '../../../middleware/validate-dto.middleware';
-import {PrivateRouteMiddleware} from '../../../middleware/private-root.middleware';
+import {ValidateDtoMiddleware} from '../../../middleware/validate-dto.middleware.js';
+import {PrivateRouteMiddleware} from '../../../middleware/private-root.middleware.js';
+import {UnknownRecord} from '../../../../types/unknown-record.type';
 
 @injectable()
 export default class CommentController extends BaseController {
@@ -31,7 +32,7 @@ export default class CommentController extends BaseController {
   }
 
   public async create(
-    {body, user}: Request<Record<string, unknown>, Record<string, unknown>, CreateCommentDto>,
+    {body, user}: Request<UnknownRecord, UnknownRecord, CreateCommentDto>,
     res: Response
   ): Promise<void> {
 

@@ -1,3 +1,4 @@
+import cors from 'cors';
 import {LoggerInterface} from '../core/logger/logger.interface.js';
 import {ConfigInterface} from '../core/config/config.interface.js';
 import {RestSchema} from '../core/config/rest.schema.js';
@@ -6,9 +7,9 @@ import {AppComponent} from '../types/app-component.enum.js';
 import {DatabaseClientInterface} from '../core/database-client/database-client.interface.js';
 import {getMongoURI} from '../core/helpers/db.js';
 import express, {Express} from 'express';
-import {ExceptionFilterInterface} from '../core/exception-filters/exception-filter.interface';
+import {ExceptionFilterInterface} from '../core/exception-filters/exception-filter.interface.js';
 import {BaseController} from '../core/controller/base-controller.js';
-import {AuthenticateMiddleware} from '../core/middleware/authenticate.middleware';
+import {AuthenticateMiddleware} from '../core/middleware/authenticate.middleware.js';
 
 @injectable()
 export default class Application {
@@ -17,10 +18,12 @@ export default class Application {
   constructor(@inject(AppComponent.LoggerInterface) private readonly logger: LoggerInterface,
               @inject(AppComponent.ConfigInterface) private readonly config: ConfigInterface<RestSchema>,
               @inject(AppComponent.DatabaseClientInterface) private readonly databaseClient: DatabaseClientInterface,
-              @inject(AppComponent.ExceptionFilterInterface) private readonly exceptionFilter: ExceptionFilterInterface,
+              @inject(AppComponent.HttpErrorExceptionFilter) private readonly httpErrorExceptionFilter: ExceptionFilterInterface,
               @inject(AppComponent.UserController) private readonly userController: BaseController,
               @inject(AppComponent.OfferController) private readonly offerController: BaseController,
               @inject(AppComponent.CommentController) private readonly commentController: BaseController,
+              @inject(AppComponent.BaseExceptionFilter) private readonly baseExceptionFilter: ExceptionFilterInterface,
+              @inject(AppComponent.ValidationExceptionFilter) private readonly validationExceptionFilter: ExceptionFilterInterface,
   ) {
     this.server = express();
   }
@@ -62,12 +65,15 @@ export default class Application {
     );
     const authenticateMiddleware = new AuthenticateMiddleware(this.config.get('JWT_SECRET'));
     this.server.use(authenticateMiddleware.execute.bind(authenticateMiddleware));
+    this.server.use(cors());
     this.logger.info('Middleware init completed');
   }
 
   private async _initExceptionFilters() {
     this.logger.info('Init exception filters');
-    this.server.use(this.exceptionFilter.catch.bind(this.exceptionFilter));
+    this.server.use(this.validationExceptionFilter.catch.bind(this.validationExceptionFilter));
+    this.server.use(this.httpErrorExceptionFilter.catch.bind(this.httpErrorExceptionFilter));
+    this.server.use(this.baseExceptionFilter.catch.bind(this.baseExceptionFilter));
     this.logger.info('Exception filters completed');
   }
 
