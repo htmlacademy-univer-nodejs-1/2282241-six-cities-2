@@ -82,6 +82,9 @@ export default class OfferController extends BaseController {
     this.ok(res, offersToRes);
   }
 
+  //TSError: ⨯ Unable to compile TypeScript:
+  // src/core/modules/offer/controller/offer.controller.ts(86,12): error TS2339: Property 'user' does not exist on type 'Request<UnknownRecord, UnknownRecord, CreateOfferDto, ParsedQs, Reco
+  // rd<string, any>>'.
   public async create(
     {body, user}: Request<UnknownRecord, UnknownRecord, CreateOfferDto>,
     res: Response): Promise<void> {
@@ -107,10 +110,6 @@ export default class OfferController extends BaseController {
     this.ok(res, fillDTO(OfferRdo, offer));
   }
 
-  // public async getComments({ params }: Request<ParamOfferId>, res: Response): Promise<void> {
-  //   const comments = await this.commentService.findByOfferId(params.offerId);
-  //   this.ok(res, fillDTO(CommentRdo, comments));
-  // }
   public async getComments(
     { params }: Request<ParamOfferId, UnknownRecord, UnknownRecord>,
     res: Response

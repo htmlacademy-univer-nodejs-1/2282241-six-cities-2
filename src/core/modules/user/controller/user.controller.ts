@@ -101,7 +101,8 @@ export class UserController extends BaseController {
       filepath: req.file?.path
     });
   }
-
+//TSError: ⨯ Unable to compile TypeScript:
+// src/core/modules/user/controller/user.controller.ts(105,36): error TS2339: Property 'user' does not exist on type 'Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>'.
   public async checkAuthenticate({ user: { email }}: Request, res: Response) {
     const foundedUser = await this.userService.findByEmail(email);
 
