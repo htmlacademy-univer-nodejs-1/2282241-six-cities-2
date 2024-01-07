@@ -18,6 +18,7 @@ import {JWT_ALGORITHM} from '../user.constant.js';
 import LoggedUserRdo from '../rdo/logged-user.rdo.js';
 import {UnknownRecord} from '../../../../types/unknown-record.type.js';
 import {ConfigInterface} from '../../../config/config.interface.js';
+import UploadAvatarResponse from "../rdo/upload-avatar.response";
 
 @injectable()
 export class UserController extends BaseController {
@@ -54,7 +55,6 @@ export class UserController extends BaseController {
     const existsUser = await this.userService.findByEmail(body.email);
 
     if (existsUser) {
-      console.log('a');
       throw new HttpError(
         StatusCodes.CONFLICT,
         `User with email «${body.email}» exists.`,
@@ -98,9 +98,10 @@ export class UserController extends BaseController {
   }
 
   public async uploadAvatar(req: Request, res: Response) {
-    this.created(res, {
-      filepath: req.file?.path
-    });
+    const {userId} = req.params;
+    const uploadFile = {avatar: req.file?.filename};
+    await this.userService.updateById(userId, uploadFile);
+    this.created(res, fillDTO(UploadAvatarResponse, uploadFile));
   }
 
   public async checkAuthenticate(req: Request, res: Response) {
