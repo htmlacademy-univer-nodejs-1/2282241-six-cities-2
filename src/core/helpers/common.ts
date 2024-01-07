@@ -4,7 +4,9 @@ import {ClassConstructor, plainToInstance} from 'class-transformer';
 import {TokenPayload} from '../../types/token-payload.js';
 import { ValidationErrorField } from '../../types/validation-error-field.type.js';
 import { ValidationError } from 'class-validator';
-import {ServiceError} from '../../types/service-error.enum';
+import {ServiceError} from '../../types/service-error.enum.js';
+import {DEFAULT_STATIC_IMAGES} from '../../app/rest.constant.js';
+import {UnknownRecord} from '../../types/unknown-record.type.js';
 
 export const createSHA256 = (line: string, salt: string): string => {
   const shaHasher = crypto.createHmac('sha256', salt);
@@ -37,4 +39,35 @@ export function transformErrors(errors: ValidationError[]): ValidationErrorField
     value,
     messages: constraints ? Object.values(constraints) : []
   }));
+}
+export function getFullServerPath(host: string, port: number) {
+  return `http://${host}:${port}`;
+}
+function isObject(value: unknown) {
+  return typeof value === 'object' && value !== null;
+}
+
+export function transformProperty(
+  property: string,
+  someObject: UnknownRecord,
+  transformFn: (object: UnknownRecord) => void
+) {
+  return Object.keys(someObject)
+    .forEach((key) => {
+      if (key === property) {
+        transformFn(someObject);
+      } else if (isObject(someObject[key])) {
+        transformProperty(property, someObject[key] as UnknownRecord, transformFn);
+      }
+    });
+}
+
+export function transformObject(properties: string[], staticPath: string, uploadPath: string, data:UnknownRecord) {
+  return properties
+    .forEach((property) => {
+      transformProperty(property, data, (target: UnknownRecord) => {
+        const rootPath = DEFAULT_STATIC_IMAGES.includes(target[property] as string) ? staticPath : uploadPath;
+        target[property] = `${rootPath}/${target[property]}`;
+      });
+    });
 }

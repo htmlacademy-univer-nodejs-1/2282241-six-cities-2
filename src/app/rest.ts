@@ -10,6 +10,7 @@ import express, {Express} from 'express';
 import {ExceptionFilterInterface} from '../core/exception-filters/exception-filter.interface.js';
 import {BaseController} from '../core/controller/base-controller.js';
 import {AuthenticateMiddleware} from '../core/middleware/authenticate.middleware.js';
+import {getFullServerPath} from '../core/helpers/common.js';
 
 @injectable()
 export default class Application {
@@ -45,7 +46,7 @@ export default class Application {
     this.logger.info('Try to init server');
     const port = this.config.get('PORT');
     this.server.listen(port);
-    this.logger.info(`Server started on http://localhost:${this.config.get('PORT')}`);
+    this.logger.info(`🚀Server started on ${getFullServerPath(this.config.get('HOST'), this.config.get('PORT'))}`);
   }
 
   private async _initControllers(){
@@ -62,6 +63,10 @@ export default class Application {
     this.server.use(
       '/upload',
       express.static(this.config.get('UPLOAD_DIRECTORY'))
+    );
+    this.server.use(
+      '/static',
+      express.static(this.config.get('STATIC_DIRECTORY_PATH'))
     );
     const authenticateMiddleware = new AuthenticateMiddleware(this.config.get('JWT_SECRET'));
     this.server.use(authenticateMiddleware.execute.bind(authenticateMiddleware));

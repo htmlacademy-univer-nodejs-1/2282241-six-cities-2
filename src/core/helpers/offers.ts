@@ -1,6 +1,5 @@
 import { CityType } from '../../types/city.type.js';
 import { ConveniencesType } from '../../types/conveniences.type.js';
-import { CoordinatesType } from '../../types/coordinates.type.js';
 import { Offer } from '../../types/offer.type.js';
 import { TypeHousing } from '../../types/typeHousing.js';
 import { User } from '../../types/user.type.js';
@@ -25,6 +24,6 @@ export function createOffer(offerData: string): Offer {
     conveniences: conveniences as ConveniencesType,
     author: author as unknown as User,
     countComments: Number.parseInt(countComments, 10),
-    coordinates: coordinates.split(',') as unknown as CoordinatesType
+    coordinates: coordinates.split(',') as unknown as number[],
   } as Offer;
 }
