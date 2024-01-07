@@ -2,10 +2,10 @@ import {inject, injectable} from 'inversify';
 import { Response, Request} from 'express';
 import {BaseController} from '../../../controller/base-controller.js';
 import {AppComponent} from '../../../../types/app-component.enum.js';
-import {LoggerInterface} from '../../../logger/logger.interface';
+import {LoggerInterface} from '../../../logger/logger.interface.js';
 import {HttpMethod} from '../../../../types/http-method.enum.js';
-import CreateUserDto from '../dto/create-user.dto';
-import {RestSchema} from '../../../config/rest.schema';
+import CreateUserDto from '../dto/create-user.dto.js';
+import {RestSchema} from '../../../config/rest.schema.js';
 import {Config} from 'convict';
 import UserService from '../user.service.js';
 import {HttpError} from '../../../errors/http-error.js';
@@ -15,8 +15,9 @@ import {createJWT, fillDTO} from '../../../helpers/common.js';
 import {UploadFileMiddleware} from '../../../middleware/upload-file.middleware.js';
 import {ValidateObjectIdMiddleware} from '../../../middleware/validate-objectId.middleware.js';
 import {LoginUserDto} from '../dto/login-user.dto.js';
-import LoggedUserRdo from '../rdo/logged-user.rdo.js';
 import {JWT_ALGORITHM} from '../user.constant.js';
+import LoggedUserRdo from '../rdo/logged-user.rdo.js';
+import {UnknownRecord} from '../../../../types/unknown-record.type';
 
 @injectable()
 export class UserController extends BaseController {
@@ -65,8 +66,8 @@ export class UserController extends BaseController {
   }
 
   public async login(
-    { body }:Request<Record<string, unknown>, Record<string, unknown>, LoginUserDto>,
-    _res: Response,
+    { body }: Request<UnknownRecord, UnknownRecord, LoginUserDto>,
+    res: Response,
   ): Promise<void> {
     const user = await this
       .userService
@@ -89,7 +90,7 @@ export class UserController extends BaseController {
       }
     );
 
-    this.ok(_res, fillDTO(LoggedUserRdo, {
+    this.ok(res, fillDTO(LoggedUserRdo, {
       email: user.email,
       token
     }));
@@ -100,7 +101,8 @@ export class UserController extends BaseController {
       filepath: req.file?.path
     });
   }
-
+//TSError: ⨯ Unable to compile TypeScript:
+// src/core/modules/user/controller/user.controller.ts(105,36): error TS2339: Property 'user' does not exist on type 'Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>'.
   public async checkAuthenticate({ user: { email }}: Request, res: Response) {
     const foundedUser = await this.userService.findByEmail(email);
 

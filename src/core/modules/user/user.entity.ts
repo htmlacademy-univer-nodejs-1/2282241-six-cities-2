@@ -1,6 +1,8 @@
-import typegoose, { defaultClasses, getModelForClass } from '@typegoose/typegoose';
+import typegoose, {defaultClasses, getModelForClass, Ref} from '@typegoose/typegoose';
 import { User } from '../../../types/user.type.js';
 import { createSHA256 } from '../../helpers/common.js';
+import {UserEnum} from '../../../types/user.enum';
+import {OfferEntity} from '../offer/offer.entity';
 
 const {prop, modelOptions} = typegoose;
 
@@ -47,10 +49,11 @@ export class UserEntity extends defaultClasses.TimeStamps implements User {
     return hashPassword === this.password;
   }
 
-  @prop({required: true})
-  public userType: string;
+  @prop({required: true, enum: UserEnum})
+  public userType: UserEnum;
 
-  public favoriteOffers!: string[];
+  @prop({ required: true, ref: 'OfferEntity', default: [] })
+  public favoriteOffers!: Ref<OfferEntity>[];
 }
 
 export const UserModel = getModelForClass(UserEntity);

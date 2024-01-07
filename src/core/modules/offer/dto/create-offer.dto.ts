@@ -12,64 +12,62 @@ import {
 import {CityType} from '../../../../types/city.type.js';
 import {TypeHousing} from '../../../../types/typeHousing.js';
 import {ConveniencesType} from '../../../../types/conveniences.type.js';
-import {User} from '../../../../types/user.type.js';
 import {CoordinatesType} from '../../../../types/coordinates.type.js';
 import {CreateOfferValidationMessage} from './create-offer-messages.js';
 
 export default class CreateOfferDto {
   @MinLength(10, {message: CreateOfferValidationMessage.name.minLength})
   @MaxLength(100, {message: CreateOfferValidationMessage.name.maxLength})
-    name!: string;
+  public name!: string;
 
   @MinLength(20, {message: CreateOfferValidationMessage.name.minLength})
   @MaxLength(1024, {message: CreateOfferValidationMessage.name.maxLength})
-    description!: string;
+  public description!: string;
 
   @IsDateString({}, {message: CreateOfferValidationMessage.date.invalidFormat})
-    date!: Date;
+  public date!: Date;
 
   @IsString({message: CreateOfferValidationMessage.city.invalidFormat})
-    city!: CityType;
+  public city!: CityType;
 
   @IsString({message: CreateOfferValidationMessage.previewImg.invalidFormat})
-    previewImg!: string;
+  public previewImg!: string;
 
   @IsArray({message: CreateOfferValidationMessage.images.invalidFormat})
-    images!: string[];
+  public images!: string[];
 
   @IsBoolean({message: CreateOfferValidationMessage.flagIsPremium.invalidFormat})
-    flagIsPremium!: boolean;
+  public flagIsPremium!: boolean;
 
   @IsBoolean({message: CreateOfferValidationMessage.flagIsFavourites.invalidFormat})
-    flagIsFavourites!: boolean;
+  public flagIsFavourites!: boolean;
 
   @IsNumber({}, {message: CreateOfferValidationMessage.rating.invalidFormat})
   @Length(1, 5, {message: CreateOfferValidationMessage.rating.lengthField})
-    rating!: 1 | 2 | 3 | 4 | 5;
+  public rating!: 1 | 2 | 3 | 4 | 5;
 
   @IsString({message: CreateOfferValidationMessage.typeHousing.invalidFormat})
-    typeHousing!: TypeHousing;
+  public typeHousing!: TypeHousing;
 
   @IsInt({message: CreateOfferValidationMessage.countRooms.invalidFormat})
   @Length(1, 8, {message: CreateOfferValidationMessage.countRooms.lengthField})
-    countRooms!: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8;
+  public countRooms!: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8;
 
   @IsInt({message: CreateOfferValidationMessage.countPeople.invalidFormat})
   @Length(1, 10, {message: CreateOfferValidationMessage.countPeople.lengthField})
-    countPeople!: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10;
+  public countPeople!: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10;
 
   @IsNumber({}, {message: CreateOfferValidationMessage.price.invalidFormat})
   @Length(100, 100000, {message: CreateOfferValidationMessage.price.lengthField})
-    price!: number;
+  public price!: number;
 
   @IsString({message: CreateOfferValidationMessage.conveniences.invalidFormat})
-    conveniences!: ConveniencesType;
+  public conveniences!: ConveniencesType;
 
+  public userId!: string;
 
-  user!: User;
-
-  countComments!: number;
+  public countComments!: number;
 
   @IsObject({message: CreateOfferValidationMessage.coordinates.invalidFormat})
-    coordinates!: CoordinatesType;
+  public coordinates!: CoordinatesType;
 }
